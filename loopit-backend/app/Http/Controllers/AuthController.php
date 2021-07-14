@@ -16,8 +16,8 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
         //check user
-        $user = User::where('email', $fields['email'])->first();
-
+        //$user = User::where('email', $fields['email'])->first();
+        $user = $this->checkUser();
         //check password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
             return response(['invalid credentials'], 401);
@@ -29,6 +29,10 @@ class AuthController extends Controller
             'token' => $token
         ];
         return response($response, 201);
+    }
+
+    public function checkUser(string $email){
+        return $user = User::where('email', $email)->first();
     }
 
     public function register(Request $request)
